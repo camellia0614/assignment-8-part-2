@@ -13,16 +13,6 @@ spec:
       labels:
         service: fastapi
     spec:
-      initContainers:
-        - name: wait-for-postgres
-          image: postgres:16
-          env:
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_PASSWORD
-          command: ['sh','-c','until pg_isready -h postgres -p 5432 -U postgres; do echo "waiting for postgres"; sleep 2; done']
       containers:
         - name: fastapi-service
           image: jiayucheng0614/assignment-8-part-2:latest
