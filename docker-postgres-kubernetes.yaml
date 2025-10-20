@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:16
+          image: postgres
           ports:
             - containerPort: 5432
           env:
@@ -28,13 +28,9 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-            # 关键：指向卷里的子目录，避免 overlayfs 冲突
-            - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
-              subPath: pgdata
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
@@ -70,5 +66,4 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  # base64("mysecretpassword")
-  POSTGRES_PASSWORD: bXlzZWNyZXRwYXNzd29yZA==
+  POSTGRES_PASSWORD: cG9zdGdyZXNfcGFzc3dvcmQ= # Base64 encoded password (e.g., 'postgres_password')
